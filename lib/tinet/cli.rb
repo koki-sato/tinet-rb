@@ -1,5 +1,7 @@
 require "thor"
 require "tinet/setting"
+require "tinet/command/build"
+require "tinet/command/conf"
 require "tinet/command/down"
 require "tinet/command/exec"
 require "tinet/command/init"
@@ -24,6 +26,7 @@ module Tinet
     option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
     def up
       Tinet::Command::Up.new(options).run
+      Tinet::Command::Conf.new(options).run
     end
 
     desc 'down [OPTIONS]', 'Stop and remove containers'
@@ -42,6 +45,25 @@ module Tinet
     option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
     def exec(node, command)
       Tinet::Command::Exec.new(options).run(node, command)
+    end
+
+    desc 'build [OPTIONS]', 'Build Docker images from the spec file'
+    option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
+    def build
+      Tinet::Command::Build.new(options).run
+    end
+
+    desc 'conf [OPTIONS]', 'Execute commands in a running container'
+    option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
+    def conf
+      Tinet::Command::Conf.new(options).run
+    end
+
+    desc 'restart [OPTIONS]', 'Down and Up running containers'
+    option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
+    def restart
+      Tinet::Command::Down.new(options).run
+      Tinet::Command::Up.new(options).run
     end
 
     desc 'version', 'Show the TINET version information'
