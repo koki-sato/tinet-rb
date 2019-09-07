@@ -1,6 +1,7 @@
 require "thor"
 require "tinet/setting"
 require "tinet/command/down"
+require "tinet/command/exec"
 require "tinet/command/init"
 require "tinet/command/ps"
 require "tinet/command/pull"
@@ -35,6 +36,12 @@ module Tinet
     option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
     def pull
       Tinet::Command::Pull.new(options).run
+    end
+
+    desc 'exec [OPTIONS] NODE COMMAND', 'Execute a command in a running container'
+    option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
+    def exec(node, command)
+      Tinet::Command::Exec.new(options).run(node, command)
     end
 
     desc 'version', 'Show the TINET version information'
