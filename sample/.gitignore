@@ -1,0 +1,9 @@
+# Vagrant
+.vagrant/
+
+# Log files
+*.log
+*.logs
+
+# Vagrant Patch
+*.box

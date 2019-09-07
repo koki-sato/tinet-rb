@@ -1,0 +1,48 @@
+Vagrant.configure("2") do |config|
+  config.vm.box = "ubuntu/bionic64"
+
+  config.vm.provider "virtualbox" do |vb|
+    vb.cpus = 2
+    vb.memory = 1024
+  end
+
+  config.vm.synced_folder '..', '/home/vagrant/tinet', disabled: false
+
+  config.vm.provision "shell", inline: <<-SHELL
+    apt-get update
+
+    # Install Docker
+    apt-get install apt-transport-https ca-certificates curl software-properties-common jq
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    apt-get update
+    apt-get install -y docker-ce
+
+    # Install Open vSwitch
+    apt-get install -y openvswitch-switch
+
+    # Install requirements for rbenv
+    export DEBIAN_FRONTEND=noninteractive
+    apt-get install -y build-essential libssl-dev libreadline-dev zlib1g-dev
+  SHELL
+
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    if ! [ -d .rbenv ]; then
+      git clone https://github.com/rbenv/rbenv.git .rbenv
+      git clone https://github.com/rbenv/ruby-build.git .rbenv/plugins/ruby-build
+      echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> .bashrc
+      echo 'eval "$(rbenv init -)"' >> .bashrc
+    fi
+
+    if [ -e .rbenv/bin/rbenv ]; then
+      export PATH="$HOME/.rbenv/bin:$PATH"
+      export PATH="$HOME/.rbenv/plugins/ruby-build/bin:$PATH"
+      eval "$(rbenv init -)"
+
+      rbenv install 2.6.4
+      rbenv rehash
+      rbenv global 2.6.4
+      gem update bundler
+    fi
+  SHELL
+end

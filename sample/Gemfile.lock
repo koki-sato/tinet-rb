@@ -1,0 +1,19 @@
+PATH
+  remote: ..
+  specs:
+    tinet (0.0.1)
+      thor
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    thor (0.20.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  tinet!
+
+BUNDLED WITH
+   2.0.2
