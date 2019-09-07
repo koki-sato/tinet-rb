@@ -5,6 +5,7 @@ module Tinet
   class Setting
     ROOT = File.expand_path(File.join(File.dirname(__FILE__), '..', '..'))
     DOCKER_PREFIX = 'tinet'.freeze
+    DEFAULT_SPECFILE_PATH = './spec.yml'.freeze
 
     def initialize
     end
