@@ -7,9 +7,6 @@ module Tinet
     DOCKER_PREFIX = 'tinet'.freeze
     DEFAULT_SPECFILE_PATH = './spec.yml'.freeze
 
-    def initialize
-    end
-
     def root
       ROOT
     end

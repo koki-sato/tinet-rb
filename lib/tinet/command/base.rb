@@ -1,3 +1,5 @@
+require "tinet/data"
+
 module Tinet
   module Command
     class Base
@@ -12,6 +14,15 @@ module Tinet
 
       def logger
         Tinet.logger
+      end
+
+      def specfile
+        @options[:specfile]
+      end
+
+      def data
+        return nil if specfile.nil? || specfile.empty?
+        @data ||= Tinet::Data.parse(specfile)
       end
 
       private
