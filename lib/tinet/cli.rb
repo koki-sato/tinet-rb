@@ -3,6 +3,7 @@ require "tinet/setting"
 require "tinet/command/down"
 require "tinet/command/init"
 require "tinet/command/ps"
+require "tinet/command/pull"
 require "tinet/command/up"
 
 module Tinet
@@ -28,6 +29,12 @@ module Tinet
     option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
     def down
       Tinet::Command::Down.new(options).run
+    end
+
+    desc 'pull [OPTIONS]', 'Pull service images'
+    option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
+    def pull
+      Tinet::Command::Pull.new(options).run
     end
 
     desc 'version', 'Show the TINET version information'
