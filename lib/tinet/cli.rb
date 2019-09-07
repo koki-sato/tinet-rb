@@ -2,6 +2,7 @@ require "thor"
 require "tinet/setting"
 require "tinet/command/init"
 require "tinet/command/ps"
+require "tinet/command/up"
 
 module Tinet
   class CLI < Thor
@@ -14,6 +15,12 @@ module Tinet
     option :all, aliases: '-a', type: :boolean
     def ps
       Tinet::Command::Ps.new(options).run
+    end
+
+    desc 'up [OPTIONS]', 'Create and start containers'
+    option :specfile, aliases: '-f', type: :string, default: Tinet::DEFAULT_SPECFILE_PATH, desc: 'Specify specification YAML file'
+    def up
+      Tinet::Command::Up.new(options).run
     end
 
     desc 'version', 'Show the TINET version information'
