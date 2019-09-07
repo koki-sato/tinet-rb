@@ -1,0 +1,5 @@
+#!/usr/bin/env ruby
+
+require "tinet"
+
+Tinet::CLI.start(ARGV)
