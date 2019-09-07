@@ -1,5 +1,3 @@
-require "tinet/setting"
-require "tinet/shell"
 require "tinet/command/base"
 
 module Tinet
@@ -7,9 +5,9 @@ module Tinet
     class Ps < Base
       def run
         if all
-          command = "docker ps -a -f name=#{Tinet::DOCKER_PREFIX}"
+          command = "docker ps -a -f name=#{Tinet.namespace}"
         else
-          command = "docker ps -f name=#{Tinet::DOCKER_PREFIX}"
+          command = "docker ps -f name=#{Tinet.namespace}"
         end
         stdout, _stderr, _status = sudo command
         logger.info 'TINET Docker Containers'

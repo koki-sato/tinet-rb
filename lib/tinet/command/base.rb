@@ -1,5 +1,6 @@
 require "tinet/data"
 require "tinet/link"
+require "tinet/shell"
 
 module Tinet
   module Command
@@ -29,6 +30,34 @@ module Tinet
       def links
         return nil if data.nil?
         @links ||= Tinet::Link.link(data.nodes, data.switches)
+      end
+
+      def exec_pre_cmd
+        data.options[:pre_cmd].each { |cmd| sudo command }
+      end
+
+      def exec_pre_init
+        data.options[:pre_init].each { |cmd| sudo command }
+      end
+
+      def exec_post_init
+        data.options[:post_init].each { |cmd| sudo command }
+      end
+
+      def exec_pre_conf
+        data.options[:pre_conf].each { |cmd| sudo command }
+      end
+
+      def exec_post_conf
+        data.options[:post_conf].each { |cmd| sudo command }
+      end
+
+      def exec_pre_fin
+        data.options[:pre_fin].each { |cmd| sudo command }
+      end
+
+      def exec_post_fin
+        data.options[:post_fin].each { |cmd| sudo command }
       end
 
       private
