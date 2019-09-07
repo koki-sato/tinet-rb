@@ -27,9 +27,23 @@ module Tinet
         @data ||= Tinet::Data.parse(specfile)
       end
 
+      def nodes
+        data.nodes unless data.nil?
+      end
+
+      def switches
+        data.switches unless data.nil?
+      end
+
       def links
         return nil if data.nil?
         @links ||= Tinet::Link.link(data.nodes, data.switches)
+      end
+
+      def mount_docker_netns(container, netns)
+        pid, * = sudo "docker inspect #{container} -f {{.State.Pid}}"
+        sudo 'mkdir -p /var/run/netns'
+        sudo "ln -s /proc/#{pid}/ns/net /var/run/netns/#{netns}"
       end
 
       def exec_pre_cmd
@@ -52,12 +66,12 @@ module Tinet
         data.options[:post_conf].each { |cmd| sudo command }
       end
 
-      def exec_pre_fin
-        data.options[:pre_fin].each { |cmd| sudo command }
+      def exec_pre_down
+        data.options[:pre_down].each { |cmd| sudo command }
       end
 
-      def exec_post_fin
-        data.options[:post_fin].each { |cmd| sudo command }
+      def exec_post_down
+        data.options[:post_down].each { |cmd| sudo command }
       end
 
       private

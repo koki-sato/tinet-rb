@@ -8,8 +8,8 @@ module Tinet
         exec_pre_init
 
         # Create Nodes and Switches
-        data.nodes.each { |node| node_up(node) }
-        data.switches.each { |switch| switch_up(switch) }
+        nodes.each { |node| node_up(node) }
+        switches.each { |switch| switch_up(switch) }
 
         # Create Links
         links.each { |link| link_up(link) }
@@ -73,12 +73,6 @@ module Tinet
             kokobr_netns(link.left.switch.name, link.right.node.name, link.right.name)
           end
         end
-      end
-
-      def mount_docker_netns(container, netns)
-        pid, * = sudo "docker inspect #{container} -f {{.State.Pid}}"
-        sudo 'mkdir -p /var/run/netns'
-        sudo "ln -s /proc/#{pid}/ns/net /var/run/netns/#{netns}"
       end
 
       def kokobr(bridge, container, ifname)

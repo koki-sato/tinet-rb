@@ -23,8 +23,8 @@ module Tinet
           post_init: fetch(yaml, 'post_init'),
           pre_conf: fetch(yaml, 'pre_conf'),
           post_conf: fetch(yaml, 'post_conf'),
-          pre_fin: fetch(yaml, 'pre_fin'),
-          post_fin: fetch(yaml, 'post_fin')
+          pre_down: fetch(yaml, 'pre_down'),
+          post_down: fetch(yaml, 'post_down')
         }
 
         self.new(nodes, switches, options)
