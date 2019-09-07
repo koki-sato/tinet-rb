@@ -4,6 +4,6 @@ require "tinet/shell"
 require "tinet/cli"
 
 module Tinet
-  class Error < StandardError; end
-  # Your code goes here...
+  class InvalidYAMLError < StandardError; end
+  class InvalidTypeError < StandardError; end
 end
