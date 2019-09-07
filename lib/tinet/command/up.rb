@@ -41,7 +41,7 @@ module Tinet
       def node_up(node)
         case node.type
         when :docker
-          sudo "docker run -td --hostname #{node.name} --net=none #{Tinet.namespace}-#{node.name} --rm --privileged #{node.image}"
+          sudo "docker run -td --hostname #{node.name} --net=none --name #{Tinet.namespace}-#{node.name} --rm --privileged #{node.image}"
         when :netns
           sudo "ip netns add #{Tinet.namespace}-#{node.name}"
         end
@@ -49,7 +49,8 @@ module Tinet
 
       # @param switch [Tinet::Switch]
       def switch_up(switch)
-        sudo "ovs-vsctl add-br #{Tinet.namespace}-#{switch.name} && ip link set #{switch.name} up"
+        sudo "ovs-vsctl add-br #{Tinet.namespace}-#{switch.name}"
+        sudo "ip link set #{switch.name} up"
       end
 
       # @param link

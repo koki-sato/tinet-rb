@@ -7,7 +7,7 @@ module Tinet
         nodes.each do |node|
           unless node.image.nil?
             stdout, * = sudo "docker pull #{node.image}"
-            logger.info stdout
+            logger.info stdout unless dry_run
           end
         end
       end

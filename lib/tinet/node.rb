@@ -12,7 +12,7 @@ module Tinet
 
       interfaces = interfaces.map { |interface| Interfase.parse(interface) }
       cmds = node_hash.fetch('cmds', []).map { |cmd| cmd['cmd'] || cmd }
-      self.new(name, type, node_hash['image'], node_hash['build'], interfaces, cmds)
+      self.new(name, type.to_sym, node_hash['image'], node_hash['build'], interfaces, cmds)
     end
 
     attr_reader :name, :type, :image, :build, :interfaces, :cmds

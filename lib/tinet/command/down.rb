@@ -10,7 +10,7 @@ module Tinet
         nodes.each do |node|
           node.interfaces.each do |interface|
             if interface.type == :phys
-              detach_physif_from_docker("#{Tinet.namespace}-#{node.name}", interface.name)
+              detach_physnet_from_docker("#{Tinet.namespace}-#{node.name}", interface.name)
             end
           end
         end

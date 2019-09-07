@@ -10,9 +10,11 @@ module Tinet
           command = "docker ps -f name=#{Tinet.namespace}"
         end
         stdout, _stderr, _status = sudo command
-        logger.info 'TINET Docker Containers'
-        logger.info '-' * 50
-        logger.info stdout
+        unless dry_run
+          logger.info 'TINET Docker Containers'
+          logger.info '-' * 50
+          logger.info stdout
+        end
       end
 
       private

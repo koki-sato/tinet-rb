@@ -3,6 +3,12 @@ require "tinet/setting"
 
 module Tinet
   module Shell
+    DummyStatus = Struct.new(:success) do |status|
+      def success?
+        success
+      end
+    end
+
     def sudo(command)
       sh "sudo #{command}"
     end

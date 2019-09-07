@@ -5,11 +5,13 @@ module Tinet
     class << self
       # @param nodes [Array<Tinet::Node>]
       # @param switches [Array<Tinet::Switch>]
+      # @return [Array<Tinet::Link>]
       def link(nodes, switches)
         link_n2n(nodes) + link_s2n(nodes, switches)
       end
 
       # @param nodes [Array<Tinet::Node>]
+      # @return [Array<Tinet::Link>]
       def link_n2n(nodes)
         list, index = [], {}
         nodes.each do |node|
@@ -30,6 +32,7 @@ module Tinet
 
       # @param nodes [Array<Tinet::Node>]
       # @param switches [Array<Tinet::Switch>]
+      # @return [Array<Tinet::Link>]
       def link_s2n(nodes, switches)
         list, index = [], {}
         nodes.each do |node|
