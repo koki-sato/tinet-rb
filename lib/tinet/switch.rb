@@ -18,6 +18,7 @@ module Tinet
     def initialize(name, interfaces)
       @name = name
       @interfaces = interfaces
+      interfaces.each { |interface| interface.switch = self }
     end
 
     class Interfase
@@ -32,7 +33,7 @@ module Tinet
         self.new(name, type.to_sym, args)
       end
 
-      attr_reader :name, :type, :args
+      attr_reader :name, :type, :args, :switch
 
       # @param name [String]
       # @param type [Symbol]
@@ -41,6 +42,11 @@ module Tinet
         @name = name
         @type = type.to_sym
         @args = args
+        @switch = nil
+      end
+
+      def switch=(switch)
+        @switch = switch
       end
     end
   end

@@ -1,4 +1,5 @@
 require "tinet/data"
+require "tinet/link"
 
 module Tinet
   module Command
@@ -23,6 +24,11 @@ module Tinet
       def data
         return nil if specfile.nil? || specfile.empty?
         @data ||= Tinet::Data.parse(specfile)
+      end
+
+      def links
+        return nil if data.nil?
+        @links ||= Tinet::Link.link(data.nodes, data.switches)
       end
 
       private

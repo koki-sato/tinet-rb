@@ -12,16 +12,19 @@ module Tinet
         raise InvalidYAMLError, "Nodes must be array" unless yaml['nodes'].is_a?(Array)
         raise InvalidYAMLError, "Switches must be array" unless yaml['switches'].is_a?(Array)
 
+        namespace = yaml.fetch('meta', {}).fetch('namespace', nil)
+        Tinet.namespace = namespace unless namespace.nil? || namespace.empty?
+
         nodes = yaml['nodes'].map { |node| Tinet::Node.parse(node) }
         switches = yaml['switches'].map { |switch| Tinet::Switch.parse(switch) }
         options = {
-          precmd: fetch(yaml, 'precmd'),
-          preinit: fetch(yaml, 'preinit'),
-          postinit: fetch(yaml, 'postinit'),
-          preconf: fetch(yaml, 'preconf'),
-          postconf: fetch(yaml, 'postconf'),
-          prefinish: fetch(yaml, 'prefinish'),
-          postfinish: fetch(yaml, 'postfinish')
+          pre_cmd: fetch(yaml, 'pre_cmd'),
+          pre_init: fetch(yaml, 'pre_init'),
+          post_init: fetch(yaml, 'post_init'),
+          pre_conf: fetch(yaml, 'pre_conf'),
+          post_conf: fetch(yaml, 'post_conf'),
+          pre_fin: fetch(yaml, 'pre_fin'),
+          post_fin: fetch(yaml, 'post_fin')
         }
 
         self.new(nodes, switches, options)

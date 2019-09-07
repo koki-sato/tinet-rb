@@ -30,6 +30,7 @@ module Tinet
       @build = build
       @interfaces = interfaces
       @cmds = cmds
+      interfaces.each { |interface| interface.node = self }
     end
 
     class Interfase
@@ -44,7 +45,7 @@ module Tinet
         self.new(name, type.to_sym, args)
       end
 
-      attr_reader :name, :type, :args
+      attr_reader :name, :type, :args, :node
 
       # @param name [String]
       # @param type [Symbol]
@@ -53,6 +54,11 @@ module Tinet
         @name = name
         @type = type.to_sym
         @args = args
+        @node = nil
+      end
+
+      def node=(node)
+        @node = node
       end
     end
   end
