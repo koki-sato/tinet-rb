@@ -19,10 +19,10 @@ module Tinet
           node.interfaces.each do |interface|
             case interface.type
             when :phys
-              koko_physnet("#{Tinet.namespace}-#{node.name}", interface.name)
+              koko_physnet("#{namespaced(node.name)}", interface.name)
             when :veth
               sudo "ip link add #{interface.name} type veth peer name #{interface.args}"
-              koko_physnet("#{Tinet.namespace}-#{node.name}", interface.name)
+              koko_physnet("#{namespaced(node.name)}", interface.name)
               sudo "ip link set #{interface.args} up"
             end
           end
@@ -41,37 +41,36 @@ module Tinet
       def node_up(node)
         case node.type
         when :docker
-          sudo "docker run -td --hostname #{node.name} --net=none --name #{Tinet.namespace}-#{node.name} --rm --privileged #{node.image}"
+          sudo "docker run -td --hostname #{node.name} --net=none --name #{namespaced(node.name)} --rm --privileged #{node.image}"
         when :netns
-          sudo "ip netns add #{Tinet.namespace}-#{node.name}"
+          sudo "ip netns add #{namespaced(node.name)}"
         end
       end
 
       # @param switch [Tinet::Switch]
       def switch_up(switch)
-        sudo "ovs-vsctl add-br #{Tinet.namespace}-#{switch.name}"
-        sudo "ip link set #{switch.name} up"
+        sudo "ovs-vsctl add-br #{namespaced(switch.name)}"
+        sudo "ip link set #{namespaced(switch.name)} up"
       end
 
-      # @param link
+      # @param link [Tinet::Link]
       def link_up(link)
+        left, right = link.left, link.right
         case link.type
         when :n2n
-          left_node_name = "#{Tinet.namespace}-#{link.left.node.name}"
-          right_node_name = "#{Tinet.namespace}-#{link.right.node.name}"
-          mount_docker_netns(left_node_name, left_node_name) if link.left.node.type == :docker
-          mount_docker_netns(right_node_name, right_node_name) if link.right.node.type == :docker
-          sudo "ip link add #{link.left.name} netns #{left_node_name} type veth peer name #{link.right.name} netns #{right_node_name}"
-          sudo "ip netns exec #{left_node_name} ip link set #{link.left.name} up"
-          sudo "ip netns exec #{right_node_name} ip link set #{link.right.name} up"
-          sudo "ip netns del #{left_node_name}" if link.left.node.type == :docker
-          sudo "ip netns del #{right_node_name}" if link.right.node.type == :docker
+          mount_docker_netns(namespaced(left.node.name), namespaced(left.node.name)) if left.node.type == :docker
+          mount_docker_netns(namespaced(right.node.name), namespaced(right.node.name)) if right.node.type == :docker
+          sudo "ip link add #{left.name} netns #{namespaced(left.node.name)} type veth peer name #{right.name} netns #{namespaced(right.node.name)}"
+          sudo "ip netns exec #{namespaced(left.node.name)} ip link set #{left.name} up"
+          sudo "ip netns exec #{namespaced(right.node.name)} ip link set #{right.name} up"
+          sudo "ip netns del #{namespaced(left.node.name)}" if left.node.type == :docker
+          sudo "ip netns del #{namespaced(right.node.name)}" if right.node.type == :docker
         when :s2n
-          case link.right.node.type
+          case right.node.type
           when :docker
-            kokobr(link.left.switch.name, link.right.node.name, link.right.name)
+            kokobr(namespaced(left.switch.name), namespaced(right.node.name), right.name)
           when :netns
-            kokobr_netns(link.left.switch.name, link.right.node.name, link.right.name)
+            kokobr_netns(namespaced(left.switch.name), namespaced(right.node.name), right.name)
           end
         end
       end

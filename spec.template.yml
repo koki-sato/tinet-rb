@@ -25,7 +25,7 @@ switches:
   - name: B0
     interfaces:
       - { name: net0, type: docker, args: C0 }
-      - { name: net0, type: netns, args: C0 }
+      - { name: net0, type: netns, args: C1 }
 
 test:
   - name: p2p

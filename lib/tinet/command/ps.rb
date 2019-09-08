@@ -5,11 +5,11 @@ module Tinet
     class Ps < Base
       def run
         if all
-          command = "docker ps -a -f name=#{Tinet.namespace}"
+          stdout, * = sudo "docker ps -a -f name=#{Tinet.namespace}"
         else
-          command = "docker ps -f name=#{Tinet.namespace}"
+          stdout, * = sudo "docker ps -f name=#{Tinet.namespace}"
         end
-        stdout, _stderr, _status = sudo command
+
         unless dry_run
           logger.info 'TINET Docker Containers'
           logger.info '-' * 50
@@ -19,6 +19,7 @@ module Tinet
 
       private
 
+      # @return [boolean]
       def all
         @options[:all]
       end

@@ -49,22 +49,23 @@ module Tinet
       # @return [Array<Tinet::Link>]
       def links
         return nil if data.nil?
-        @links ||= Tinet::Link.link(data.nodes, data.switches)
+        @links ||= Tinet::Link.link(nodes, switches)
+      end
+
+      # @param name [String]
+      # @return [String]
+      def namespaced(name)
+        "#{Tinet.namespace}-#{name}"
       end
 
       # @note Override {Tinet::Shell#sh}
-      def sh(command, continue: false)
-        if dry_run
-          logger.info command
-          ['', '', DummyStatus.new(true)]
-        else
-          super
-        end
+      def sh(command, dry_run: dry_run(), print: true, continue: false)
+        super
       end
 
       def mount_docker_netns(container, netns)
         if dry_run
-          sh "PID=`sudo docker inspect #{container} -f {{.State.Pid}}`"
+          logger.info "PID=`sudo docker inspect #{container} -f {{.State.Pid}}`"
           pid = '$PID'
         else
           pid, * = sudo "docker inspect #{container} -f {{.State.Pid}}"
@@ -103,8 +104,9 @@ module Tinet
 
       private
 
+      # @return [boolean]
       def command_exist?(command)
-        _stdout, _stderr, status = sh "which #{command}", continue: true
+        *, status = sh "which #{command}", print: false, continue: true
         status.success?
       end
 

@@ -11,9 +11,9 @@ module Tinet
           node.cmds.each do |cmd|
             case node.type
             when :docker
-              sudo "docker exec #{Tinet.namespace}-#{node.name} #{cmd} > /dev/null"
+              sudo "docker exec #{namespaced(node.name)} #{cmd} > /dev/null"
             when :netns
-              sudo "ip netns exec #{Tinet.namespace}-#{node.name} #{cmd} > /dev/null"
+              sudo "ip netns exec #{namespaced(node.name)} #{cmd} > /dev/null"
             end
           end
         end

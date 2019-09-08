@@ -12,12 +12,6 @@ module Tinet
         FileUtils.cp(template, specfile)
         logger.info 'Initialized. Check spec.yml'
       end
-
-      private
-
-      def all
-        @options[:all]
-      end
     end
   end
 end

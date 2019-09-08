@@ -10,7 +10,7 @@ module Tinet
         nodes.each do |node|
           node.interfaces.each do |interface|
             if interface.type == :phys
-              detach_physnet_from_docker("#{Tinet.namespace}-#{node.name}", interface.name)
+              detach_physnet_from_docker("#{namespaced(node.name)}", interface.name)
             end
           end
         end
@@ -18,14 +18,14 @@ module Tinet
         nodes.each do |node|
           case node.type
           when :docker
-            sudo "docker stop #{Tinet.namespace}-#{node.name}"
+            sudo "docker stop #{namespaced(node.name)}"
           when :netns
-            sudo "ip netns del #{Tinet.namespace}-#{node.name}"
+            sudo "ip netns del #{namespaced(node.name)}"
           end
         end
 
         switches.each do |switch|
-          sudo "ovs-vsctl del-br #{Tinet.namespace}-#{switch.name}"
+          sudo "ovs-vsctl del-br #{namespaced(switch.name)}"
         end
 
         exec_post_down
