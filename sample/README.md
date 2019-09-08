@@ -1,6 +1,10 @@
 # Sample
 
-Samples of tinet configs. You can test them in [vagrant](https://www.vagrantup.com/).
+Samples of tinet configs. You can test them in [Vagrant](https://www.vagrantup.com/).
+
+## Requirements
+
+- Vagrant
 
 ## Setup
 
@@ -9,7 +13,7 @@ $ vagrant up
 $ vagrant ssh
 
 # in vagrant shell
-$ cd tinet
+$ cd tinet/sample
 $ bundle install
 ```
 
