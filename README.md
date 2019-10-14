@@ -1,5 +1,7 @@
 # tinet-rb
 
+[![Gem Version](https://badge.fury.io/rb/tinet.svg)](https://badge.fury.io/rb/tinet)
+
 Ruby implement of [slankdev/tinet](https://github.com/slankdev/tinet).
 
 :warning: **This is now prototype version. And also it is incompatible with YAML config format in [slankdev/tinet](https://github.com/slankdev/tinet).**
